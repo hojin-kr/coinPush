@@ -2,8 +2,8 @@ name: Coin Summary push
 
 on:
   schedule:
-    # Every 1hour
-    - cron: '0 */1 * * *'
+    # Every 6hour
+    - cron: '0 */6 * * *'
   workflow_dispatch:
   
 jobs:
