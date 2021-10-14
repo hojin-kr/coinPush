@@ -1,0 +1,27 @@
+name: Coin Summary push
+
+on:
+ workflow_dispatch:
+    inputs:
+      test:
+        description: 'test'
+        required: false
+
+jobs:
+
+  build:
+    env:
+      LINETOKEN: ${{ secrets.LINETOKEN }}
+      
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker-compose run ccxt
+
+    - name: Run coinone summary
+      run: php coinone/summary.php
+      
+    - name: Run binance summary
+      run: php binance/summary.php
