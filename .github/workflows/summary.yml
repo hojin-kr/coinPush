@@ -1,12 +1,11 @@
 name: Coin Summary push
 
 on:
- workflow_dispatch:
-    inputs:
-      test:
-        description: 'test'
-        required: false
-
+  schedule:
+    # Every 1hour
+    - cron: '0 */1 * * *'
+  workflow_dispatch:
+  
 jobs:
 
   build:
