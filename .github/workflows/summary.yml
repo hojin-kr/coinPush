@@ -19,8 +19,5 @@ jobs:
     - name: Build the Docker image
       run: docker-compose run ccxt
 
-    - name: Run coinone summary
-      run: php coinone/summary.php
-      
-    - name: Run binance summary
-      run: php binance/summary.php
+    - name: Run Summary
+      run: php worker/summary.php
