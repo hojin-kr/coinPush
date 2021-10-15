@@ -12,7 +12,7 @@ RUN sed -i 's/archive\.ubuntu\.com/us\.archive\.ubuntu\.com/' /etc/apt/sources.l
 # Miscellaneous deps
 RUN apt-get update && apt-get install -y --no-install-recommends curl gnupg git ca-certificates
 # PHP
-RUN apt-get update && apt-get install -y --no-install-recommends php php-curl php-iconv php-mbstring php-bcmath php-gmp
+RUN apt-get update && apt-get install -y --no-install-recommends php php-curl php-iconv php-mbstring php-bcmath php-gmp php-gd
 
 ## Install composer and everything else that it needs and manages
 RUN /ccxt/composer-install.sh
