@@ -9,56 +9,45 @@ $exchange = new \ccxt\coinone (array (
     'enableRateLimit' => true,
     // 'verbose' => true, // uncomment for verbose output
 ));
-persentageSummary($exchange, $root, 'coinone');
+persentageTop($exchange, $root, 'coinone');
 
 $exchange = new \ccxt\binance (array (
     'enableRateLimit' => true,
     // 'verbose' => true, // uncomment for verbose output
 ));
-persentageSummary($exchange, $root, 'binance');
+persentageTop($exchange, $root, 'binance');
 
-function persentageSummary($exchange, $root, $name) {
+function persentageTop($exchange, $root, $name) {
     $lineToken = getenv("LINETOKEN");
-    $ups = [];
-    $downs = [];
+    $ticks = [];
     foreach ($exchange->load_markets() as $symbol => $m) {
         $tick = $exchange->fetch_ticker($symbol);
         if(!isset($tick['symbol']) || !isset($tick['percentage'])) {
             continue;
         }
-        if(0 < $tick['percentage']) {
-            $ups[$tick['percentage']]['symbol'] = $tick['symbol'];
-            $ups[$tick['percentage']]['percentage'] = $tick['percentage'];
-        } else {
-            $downs[$tick['percentage']]['symbol'] = $tick['symbol'];
-            $downs[$tick['percentage']]['percentage'] = $tick['percentage'];
-        }
+        $ticks[$tick['percentage']]['symbol'] = $tick['symbol'];
+        $ticks[$tick['percentage']]['percentage'] = $tick['percentage'];
     }
-    krsort($ups);
-    ksort($downs);
-    $ups = array_splice($ups,0,10);
-    $message = "\n[$name]\nSummary Up\n";
-    if(!empty($ups)) {
-        foreach($ups as ['symbol'=>$symbol, 'percentage'=>$percentage]) {
+    if(!empty($ticks)) {
+        krsort($ticks);
+        $message = "\n[$name]\n\n";
+        foreach(array_splice($ticks,0,5) as ['symbol'=>$symbol, 'percentage'=>$percentage]) {
             $percentage = (int)$percentage;
             $message .= "$symbol : $percentage% \n";
         }
-        $filename = $name.'Ups';
+        ksort($ticks);
+        $message .= "--------------------\n";
+        foreach(array_splice($ticks,0,5) as ['symbol'=>$symbol, 'percentage'=>$percentage]) {
+            $percentage = (int)$percentage;
+            $message .= "$symbol : $percentage% \n";
+        }
+        $filename = $name;
         createImg($message, $root, $filename);
         echo shell_exec("curl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' -F 'imageFile=@/$root/process/temp/$filename.jpg' https://notify-api.line.me/api/notify 2>&1");
+    } else {
+        echo "$name ticks is emtpy";
     }
 
-    $downs = array_splice($downs,0,10);
-    $message = "\n[$name]\nSummary Down\n";
-    if(!empty($downs)) {
-        foreach($downs as ['symbol'=>$symbol, 'percentage'=>$percentage]) {
-            $percentage = (int)$percentage;
-            $message .= "$symbol : $percentage% \n";
-        }
-        $filename = $name.'Downs';
-        createImg($message, $root, $filename);
-        echo shell_exec("curl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' -F 'imageFile=@/$root/process/temp/$filename.jpg' https://notify-api.line.me/api/notify 2>&1");
-    }
 }
 
 ?>
