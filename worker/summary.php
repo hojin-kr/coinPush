@@ -31,13 +31,13 @@ function persentageTop($exchange, $root, $name) {
     if(!empty($ticks)) {
         krsort($ticks);
         $message = "\n[$name]\n\n";
-        foreach(array_splice($ticks,0,5) as ['symbol'=>$symbol, 'percentage'=>$percentage]) {
+        foreach(array_splice($ticks,0,8) as ['symbol'=>$symbol, 'percentage'=>$percentage]) {
             $percentage = (int)$percentage;
             $message .= "$symbol : $percentage% \n";
         }
         ksort($ticks);
         $message .= "--------------------\n";
-        foreach(array_splice($ticks,0,5) as ['symbol'=>$symbol, 'percentage'=>$percentage]) {
+        foreach(array_splice($ticks,0,2) as ['symbol'=>$symbol, 'percentage'=>$percentage]) {
             $percentage = (int)$percentage;
             $message .= "$symbol : $percentage% \n";
         }
