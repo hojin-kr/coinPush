@@ -11,11 +11,15 @@ function createImg(string $text, string $root, string $filename) {
     // Replace path by your own font path
     $font = "$root/process/D2Coding-Ver1.3-20171129.ttf";
     // Add some shadow to the text
-    imagettftext($im, 20, 0, 10, 436, $black, $font, "DONATE DOGE");
+    imagettftext($im, 20, 0, 10, 436, $black, $font, "Donation [DOGE]");
     imagettftext($im, 20, 0, 10, 458, $black, $font, "DAxWfmsfgyfxFmSYBcubhTyMKTDgAjp9Dq");
     imagettftext($im, 20, 0, 10, 480, $black, $font, date('Y-M-D H:i:M'));
     // Add the text
     imagettftext($im, 20, 0, 10, 20, $black, $font, $text);
+    imagettftext($im, 20, 0, 10, 20, $black, $font, $text);
+    $QR  = imagecreatefrompng("$root/process/dogeQR.png");
+    imagecopymerge($im,$QR,350,280,0,0,150,150,100);
+
     if ($im !== false) {
         // Using imagepng() results in clearer text compared with imagejpeg()
         imagejpeg($im, "$root/process/temp/$filename.jpg");
