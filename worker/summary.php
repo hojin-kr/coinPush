@@ -11,7 +11,7 @@ $exchanges[] = new \ccxt\kucoin;
 $exchanges[] = new \ccxt\gateio;
 $exchanges[] = new \ccxt\ftx;
 $exchanges[] = new \ccxt\coinone;
-$exchanges[] = new \ccxt\bithumb;
+// $exchanges[] = new \ccxt\bithumb;
 
 foreach($exchanges as $exchange) {
     $tm = time();
