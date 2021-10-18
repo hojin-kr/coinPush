@@ -4,13 +4,17 @@ on:
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
-  
+
 jobs:
 
   build:
     env:
       LINETOKEN: ${{ secrets.LINETOKEN }}
-      
+      TW_API_KEY: ${{ secrets.TW_API_KEY }}
+      TW_API_KEY_SECRET: ${{ secrets.TW_API_KEY_SECRET }}
+      TW_API_TOKEN: ${{ secrets.TW_API_TOKEN }}
+      TW_API_TOKEN_SECRET: ${{ secrets.TW_API_TOKEN_SECRET }}
+
     runs-on: ubuntu-latest
 
     steps:
@@ -20,3 +24,6 @@ jobs:
 
     - name: Run Summary
       run: php worker/summary.php
+    # TODO in bash val check, media upload id
+    - name: TW status update
+      run : twurl -c ${{ secrets.TW_API_KEY }} -s ${{ secrets.TW_API_KEY_SECRET }} -a ${{ secrets.TW_API_TOKEN }} -S ${{ secrets.TW_API_TOKEN_SECRET }} -d 'status=Hello world! Dev Test' /1.1/statuses/update.json
