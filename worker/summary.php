@@ -27,7 +27,7 @@ foreach($exchanges as $exchange) {
 // tweet
 $message = "Maximum change information by exchange ".date('Y-M-D H:i:M');
 $_mediaIds = implode(',', $mediaIds);
-shell_exec("twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -d 'status=$message' /1.1/statuses/update.json?media_ids=$_mediaIds");
+shell_exec("/usr/local/bin/twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -d 'status=$message' /1.1/statuses/update.json?media_ids=$_mediaIds");
 
 function persentageTop($exchange, $root, $name) {
     $lineToken = getenv("LINETOKEN");
@@ -63,7 +63,7 @@ function persentageTop($exchange, $root, $name) {
         // line noti
         echo shell_exec("curl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' -F 'imageFile=@/$root/process/temp/$filename.jpg' https://notify-api.line.me/api/notify 2>&1");
         // midia upload
-        $ret['data'] = json_decode(shell_exec("twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -H 'upload.twitter.com' -X POST '/1.1/media/upload.json' --file '$root/process/temp/$filename.jpg' --file-field 'media'"));
+        $ret['data'] = json_decode(shell_exec("/usr/local/bin/twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -H 'upload.twitter.com' -X POST '/1.1/media/upload.json' --file '$root/process/temp/$filename.jpg' --file-field 'media'"));
         $ret['code'] = 200;
         return $ret;
     } else {
