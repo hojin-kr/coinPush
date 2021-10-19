@@ -25,6 +25,6 @@ jobs:
     # - name: Run Summary
     #   run: php worker/summary.php
     - name: test
-      run: twurl
+      run: /ccxt/bin/twurl
 
 
