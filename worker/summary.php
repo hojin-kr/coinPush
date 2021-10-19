@@ -25,7 +25,7 @@ foreach($exchanges as $exchange) {
     echo "\n $exchange->id ".(time()-$tm)."s\n";
 }
 // tweet
-$message = "Maximum change information by exchange ".date('Y-M-D H:i:M');
+$message = "Top ".date('Y-M-D H:i:M');
 $_mediaIds = implode(',', $mediaIds);
 shell_exec("twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -d 'status=$message' /1.1/statuses/update.json?media_ids=$_mediaIds");
 
@@ -38,7 +38,6 @@ function persentageTop($exchange, $root, $name) {
     $ticks = [];
     foreach ($exchange->load_markets() as $symbol => $m) {
         $tick = $exchange->fetch_ticker($symbol);
-        if(count($ticks ?? []) > 5) break;
         if(!isset($tick['symbol']) || !isset($tick['percentage'])) {
             continue;
         }
