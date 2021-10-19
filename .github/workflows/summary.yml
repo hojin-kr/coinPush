@@ -2,7 +2,7 @@ name: Coin Summary push
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
@@ -25,6 +25,6 @@ jobs:
     # - name: Run Summary
     #   run: php worker/summary.php
     - name: test
-      run: /ccxt/bin/twurl
+      run: bin/twurl
 
 
