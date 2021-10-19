@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker-compose run ccxt
+      run: docker-compose run --rm ccxt
 
     - name: Run Summary
       run: php worker/summary.php
