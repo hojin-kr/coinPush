@@ -38,6 +38,7 @@ function persentageTop($exchange, $root, $name) {
     $ticks = [];
     foreach ($exchange->load_markets() as $symbol => $m) {
         $tick = $exchange->fetch_ticker($symbol);
+        if(count($ticks ?? []) > 5) break;
         if(!isset($tick['symbol']) || !isset($tick['percentage'])) {
             continue;
         }
@@ -63,7 +64,8 @@ function persentageTop($exchange, $root, $name) {
         // line noti
         echo shell_exec("twurl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' -F 'imageFile=@/$root/process/temp/$filename.jpg' https://notify-api.line.me/api/notify 2>&1");
         // midia upload
-        $ret['data'] = json_decode(shell_exec("twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -H 'upload.twitter.com' -X POST '/1.1/media/upload.json' --file '$root/process/temp/$filename.jpg' --file-field 'media'"));
+        echo "twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -H 'upload.twitter.com' -X POST '/1.1/media/upload.json' --file '$root/process/temp/$filename' --file-field 'media'";
+        $ret['data'] = json_decode(shell_exec("twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -H 'upload.twitter.com' -X POST '/1.1/media/upload.json' --file '$root/process/temp/$filename' --file-field 'media'"));
         $ret['code'] = 200;
         return $ret;
     } else {
