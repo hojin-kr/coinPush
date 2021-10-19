@@ -38,7 +38,6 @@ function persentageTop($exchange, $root, $name) {
     $ticks = [];
     foreach ($exchange->load_markets() as $symbol => $m) {
         $tick = $exchange->fetch_ticker($symbol);
-        if(count($ticks ?? []) > 5) break;
         if(!isset($tick['symbol']) || !isset($tick['percentage'])) {
             continue;
         }
