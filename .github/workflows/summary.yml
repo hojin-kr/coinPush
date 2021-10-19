@@ -26,14 +26,5 @@ jobs:
     #   run: php worker/summary.php
     - name: test
       run: twurl
-    - name: test
-      run: echo $PATH
-    - name: test
-      run: export PATH=".gem/bin:$PATH"
-    - name: test
-      run: twurl
-    - name: test
-      run: ls /usr/local/bin
-
 
 
