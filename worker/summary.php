@@ -62,13 +62,8 @@ function persentageTop($exchange, $root, $name) {
         }
         $filename = createImg($message, $root, $name);
         // line noti
-        echo shell_exec("twurl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' -F 'imageFile=@/$root/process/temp/$filename.jpg' https://notify-api.line.me/api/notify 2>&1");
+        echo shell_exec("curl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' -F 'imageFile=@/$root/process/temp/$filename' https://notify-api.line.me/api/notify 2>&1");
         // midia upload
-        var_dump($TW_API_KEY);
-                var_dump($TW_API_KEY_SECRET);
-                var_dump($TW_API_TOKEN);
-                var_dump($TW_API_TOKEN_SECRET);
-        echo "twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -H 'upload.twitter.com' -X POST '/1.1/media/upload.json' --file '$root/process/temp/$filename' --file-field 'media'";
         $ret['data'] = json_decode(shell_exec("twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -H 'upload.twitter.com' -X POST '/1.1/media/upload.json' --file '$root/process/temp/$filename' --file-field 'media'"));
         $ret['code'] = 200;
         return $ret;
