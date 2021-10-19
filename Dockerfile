@@ -11,8 +11,6 @@ RUN sed -i 's/archive\.ubuntu\.com/us\.archive\.ubuntu\.com/' /etc/apt/sources.l
 
 # Miscellaneous deps
 RUN apt-get update && apt-get install -y --no-install-recommends curl gnupg git ca-certificates ruby
-# Install twurl
-RUN gem install --install-dir /ccxt twurl
 # PHP
 RUN apt-get update && apt-get install -y --no-install-recommends php php-curl php-iconv php-mbstring php-bcmath php-gmp php-gd
 

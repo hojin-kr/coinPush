@@ -24,7 +24,8 @@ jobs:
 
     # - name: Run Summary
     #   run: php worker/summary.php
+    - name: Install twurl
+      run: gem install twurl
     - name: test
-      run: ls
-
+      run: twurl
 
