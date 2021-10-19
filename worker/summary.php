@@ -9,21 +9,36 @@ $exchanges = [];
 $exchanges[] = new \ccxt\binance;
 $exchanges[] = new \ccxt\kucoin;
 $exchanges[] = new \ccxt\gateio;
-$exchanges[] = new \ccxt\ftx;
 $exchanges[] = new \ccxt\coinone;
-// $exchanges[] = new \ccxt\bithumb;
 
+$TW_API_KEY = getenv("TW_API_KEY");
+$TW_API_KEY_SECRET = getenv("TW_API_KEY_SECRET");
+$TW_API_TOKEN = getenv("TW_API_TOKEN");
+$TW_API_TOKEN_SECRET = getenv("TW_API_TOKEN_SECRET");
+$mediaIds = [];
 foreach($exchanges as $exchange) {
     $tm = time();
-    persentageTop($exchange, $root, $exchange->id);
+    $ret = persentageTop($exchange, $root, $exchange->id);
+    if($ret['code'] == 200) {
+        $mediaIds[] = $ret['data']->media_id;
+    }
     echo "\n $exchange->id ".(time()-$tm)."s\n";
 }
+// tweet
+$message = "Maximum change information by exchange ".date('Y-M-D H:i:M');
+$_mediaIds = implode(',', $mediaIds);
+shell_exec("twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -d 'status=$message' /1.1/statuses/update.json?media_ids=$_mediaIds");
 
 function persentageTop($exchange, $root, $name) {
     $lineToken = getenv("LINETOKEN");
+    $TW_API_KEY = getenv("TW_API_KEY");
+    $TW_API_KEY_SECRET = getenv("TW_API_KEY_SECRET");
+    $TW_API_TOKEN = getenv("TW_API_TOKEN");
+    $TW_API_TOKEN_SECRET = getenv("TW_API_TOKEN_SECRET");
     $ticks = [];
     foreach ($exchange->load_markets() as $symbol => $m) {
         $tick = $exchange->fetch_ticker($symbol);
+        if(count($ticks ?? []) > 5) break;
         if(!isset($tick['symbol']) || !isset($tick['percentage'])) {
             continue;
         }
@@ -45,11 +60,16 @@ function persentageTop($exchange, $root, $name) {
             $percentage = (int)$percentage;
             $message .= "$symbol : $percentage% \n";
         }
-        $filename = $name;
-        createImg($message, $root, $filename);
+        $filename = createImg($message, $root, $name);
+        // line noti
         echo shell_exec("curl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' -F 'imageFile=@/$root/process/temp/$filename.jpg' https://notify-api.line.me/api/notify 2>&1");
+        // midia upload
+        $ret['data'] = json_decode(shell_exec("twurl -c $TW_API_KEY -s $TW_API_KEY_SECRET -a $TW_API_TOKEN -S $TW_API_TOKEN_SECRET -H 'upload.twitter.com' -X POST '/1.1/media/upload.json' --file '$root/process/temp/$filename.jpg' --file-field 'media'"));
+        $ret['code'] = 200;
+        return $ret;
     } else {
         echo "\n$name ticks is emtpy\n";
+        return ['code'=>400];
     }
 }
 

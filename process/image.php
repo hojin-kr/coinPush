@@ -25,6 +25,7 @@ function createImg(string $text, string $root, string $filename) {
         // Using imagepng() results in clearer text compared with imagejpeg()
         imagejpeg($im, "$root/process/temp/$filename.jpg");
         imagedestroy($im);
+        return "$filename.jpg";
     } else {
         echo 'An error occurred.';
     }
