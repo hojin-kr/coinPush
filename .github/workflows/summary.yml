@@ -19,11 +19,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker-compose run --rm ccxt
+    # - name: Build the Docker image
+    #   run: docker-compose run --rm ccxt
 
-    - name: Run Summary
-      run: php worker/summary.php
+    # - name: Run Summary
+    #   run: php worker/summary.php
     - name: test
       run: twurl
+    - name: test
+      run: echo $PATH
+    - name: test
+      run: export PATH=".gem/bin:$PATH"
+    - name: test
+      run: twurl
+    - name: test
+      run: ls /usr/local/bin
+
+
 
