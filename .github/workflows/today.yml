@@ -19,9 +19,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-#     - name: Build the Docker image
-#       run: docker-compose run --rm ccxt
     - name: Install twurl
       run: sudo gem install twurl
-    - name: Run Summary
-      run: php worker/summary.php
+    - name: Run Today
+      run: php worker/today.php
