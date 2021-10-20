@@ -20,24 +20,27 @@ if(!empty($_exchanges)) {
         echo "[LOG] analysis $exchangeId ... \n";
         $percentages = [];
         foreach($_exchange as $symbol => $data) {
-            if(!isset($data['symbol']) || !isset($data['percentage']) || !isset($data['average'])) {
+            if(!isset($data['symbol']) || !isset($data['percentage']) || !isset($data['last'])) {
                 continue;
             }
+            // if(!in_array(explode('/',$data['symbol'])[1],['USDT','KRW', 'BTC']) || strrpos($data['symbol'], 'UP') || strrpos($data['symbol'], 'DOWN')) {
+            //     continue;
+            // }
             $percentages[$data['percentage']] = $data;
         }
         $ups = $percentages;
         krsort($ups);
         $message = "\n[$exchangeId]\n\n";
-        foreach(array_splice($ups,0,8) as ['symbol'=>$symbol, 'percentage'=>$percentage, 'average'=>$average]) {
+        foreach(array_splice($ups,0,8) as ['symbol'=>$symbol, 'percentage'=>$percentage, 'last'=>$last]) {
             $percentage = (int)$percentage;
-            $message .= "$symbol : $percentage% (avg. $average)\n";
+            $message .= "$symbol : $percentage% ($last)\n";
         }
         $downs = $percentages;
         ksort($downs);
         $message .= "--------------------\n";
-        foreach(array_splice($downs,0,2) as ['symbol'=>$symbol, 'percentage'=>$percentage, 'average'=>$average]) {
+        foreach(array_splice($downs,0,2) as ['symbol'=>$symbol, 'percentage'=>$percentage, 'last'=>$last]) {
             $percentage = (int)$percentage;
-            $message .= "$symbol : $percentage% (avg. $average) \n";
+            $message .= "$symbol : $percentage% ($last) \n";
         }
         echo $message;
         // 이미지 제작
