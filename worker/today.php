@@ -8,7 +8,7 @@ include $root . '/util.php';
 date_default_timezone_set ('UTC');
 
 // 거래소별 파싱
-$exchanges = [new \ccxt\binance, new \ccxt\kucoin, new \ccxt\gateio, new \ccxt\coinone];
+$exchanges = [new \ccxt\binance, new \ccxt\kucoin, new \ccxt\coinone];
 $_exchanges = [];
 foreach($exchanges as $exchange) {
     echo "[LOG] fetch $exchange->id ... \n";
