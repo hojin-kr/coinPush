@@ -1,6 +1,6 @@
 <?php
 
-function twurlUpdateStatus($message, $mediaIds) {
+function twurlUpdateStatus(string $message, array $mediaIds) {
     $TW_API_KEY = getenv("TW_API_KEY");
     $TW_API_KEY_SECRET = getenv("TW_API_KEY_SECRET");
     $TW_API_TOKEN = getenv("TW_API_TOKEN");
@@ -25,19 +25,19 @@ function lineNotify($message, $file) {
 function exportImage(string $text, string $filename) {
     $root = dirname (__FILE__);
     // Create the image
-    $im = imagecreatetruecolor(500, 500);
+    $im = imagecreatetruecolor(380, 600);
     // Create some colors
     $white = imagecolorallocate($im, 255, 255, 255);
     $grey = imagecolorallocate($im, 128, 128, 128);
     $black = imagecolorallocate($im, 0, 0, 0);
-    imagefilledrectangle($im, 0, 0, 500, 500, $white);
+    imagefilledrectangle($im, 0, 0, 380, 600, $white);
     // Replace path by your own font path
     $font = "$root/font/D2Coding-Ver1.3-20171129.ttf";
     // Add some shadow to the text
-    imagettftext($im, 20, 0, 10, 480, $black, $font, date('Y-M-D H:i:M'));
+    // imagettftext($im, 20, 0, 10, 480, $black, $font, date('Y-M-D H:i:M'));
     // Add the text
-    imagettftext($im, 20, 0, 10, 20, $black, $font, $text);
-    imagettftext($im, 20, 0, 10, 20, $black, $font, $text);
+    imagettftext($im, 15, 0, 10, 20, $black, $font, $text);
+    imagettftext($im, 15, 0, 10, 20, $black, $font, $text);
     // Add Donation Mark
     // $QR  = imagecreatefrompng("$root/process/dogeQR.png");
     // imagettftext($im, 20, 0, 10, 436, $black, $font, "Donation [DOGE]");
@@ -49,10 +49,45 @@ function exportImage(string $text, string $filename) {
         // Using imagepng() results in clearer text compared with imagejpeg()
         imagejpeg($im, $dir);
         imagedestroy($im);
+        echo "[LOG] exportImage $dir ... \n";
         return $dir;
     } else {
         echo 'An error occurred.';
     }
 }
+
+
+// 좌우 정렬 (기준 글자 수 33자)
+function getStringSpace($cnt, $space=" ") : string {
+    $cnt = 33 - $cnt;
+    $stringSpace = "";
+    for($i = 0; $i < $cnt; $i++) {
+        $stringSpace .= $space;
+    }
+    return $stringSpace;
+}
+
+// 좌우 정렬 (기준 글자 수 33자)
+function alignmentLeftRight(string $l1, string $r1, string $r2) : string {
+    $message = "";
+    $emptySpace = getStringSpace(strlen($l1) + strlen($r1));
+    $message .= "$l1$emptySpace$r1\n";
+    $emptySpace = getStringSpace(strlen($r2));
+    $message .= "$emptySpace$r2\n";
+    return $message;
+}
+
+function tickValidator(array $exchange=[]) : array
+{
+    $vaild = [];
+    foreach($exchange as $symbol => $data) {
+        if(!isset($data['symbol']) || !isset($data['percentage']) || !isset($data['last'])) {
+            continue;
+        }
+        $vaild[$symbol] = $data;
+    }
+    return $vaild;
+}
+
 
 ?>
