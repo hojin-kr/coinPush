@@ -44,7 +44,7 @@ if(!empty($_exchanges)) {
         // 트윗
         if(!$IS_TEST) {
             echo "[LOG] twurlUpdateStatus $exchangeId... \n";
-            $status = "Today on $exchangeId";
+            $status = "Today on $exchangeId #coin #binance #kucoin #coinone #doge #btc";
             twurlUpdateStatus($status, $mediaIds);
         }
         echo "[LOG] Today $exchangeId Done \n";
