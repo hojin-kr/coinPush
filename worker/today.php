@@ -81,7 +81,7 @@ function sortPsersentage(string $exchangeId, array $exchange) : string
         $message .= alignmentLeftRight("$coinName", "$last $baseCurrencyName", "$percentage%");
     }
     $message .= getStringSpace(0, "-")."\n";
-    $message .= date('Y-M-D H:i:M')."\n\n";
+    $message .= date('Y-m-d H:i:s')." UTC\n\n";
     echo $message;
     return $message;
 }
