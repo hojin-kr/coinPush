@@ -68,12 +68,14 @@ function getStringSpace($cnt, $space=" ") : string {
 }
 
 // 좌우 정렬 (기준 글자 수 33자)
-function alignmentLeftRight(string $l1, string $r1, string $r2) : string {
+function alignmentLeftRight(string $l1, string $r1, string $r2="") : string {
     $message = "";
     $emptySpace = getStringSpace(strlen($l1) + strlen($r1));
     $message .= "$l1$emptySpace$r1\n";
-    $emptySpace = getStringSpace(strlen($r2));
-    $message .= "$emptySpace$r2\n";
+    if($r2 != "") {
+        $emptySpace = getStringSpace(strlen($r2));
+        $message .= "$emptySpace$r2\n";
+    }
     return $message;
 }
 

@@ -61,7 +61,8 @@ function sortPsersentage(string $exchangeId, array $exchange) : string
     }
     $ups = $percentages;
     krsort($ups);
-    $message = "\nToday's Biggest Change on $exchangeId\n\n";
+    $message = "\nBiggest Change\n";
+    $message .= alignmentLeftRight(" ","[$exchangeId]");
     $message .= getStringSpace(0, "-")."\n";
     foreach(array_splice($ups,0,8) as ['symbol'=>$symbol, 'percentage'=>$percentage, 'last'=>$last]) {
         $percentage = number_format($percentage, 2);
@@ -124,7 +125,8 @@ function spot(string $exchangeId, array $exchange) : string
             $spots[$symbol] = $data;
         }
     }
-    $message = "\nSpot on $exchangeId\n\n";
+    $message = "\nPopular\n";
+    $message .= alignmentLeftRight(" ","[$exchangeId]");
     $message .= getStringSpace(0, "-")."\n";
     foreach(array_splice($spots,0,10) as ['symbol'=>$symbol, 'percentage'=>$percentage, 'last'=>$last]) {
         $percentage = number_format($percentage, 2);
