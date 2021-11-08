@@ -29,7 +29,8 @@ if(!empty($_exchanges)) {
         $_exchange = tickValidator($_exchange);
         $medias = [];
         $mediaIds = [];
-        $medias[] = exportImage(sortPsersentage($exchangeId, $_exchange), $exchangeId.'_persentage');
+        $medias[] = exportImage(sortPsersentage($exchangeId, $_exchange), $exchangeId."_persentage");
+        $medias[] = exportImage(spot($exchangeId, $_exchange), $exchangeId."_spot");
         /**
          * todo add some analysis images
          * $medias[] = someMethod();
@@ -61,6 +62,7 @@ function sortPsersentage(string $exchangeId, array $exchange) : string
     $ups = $percentages;
     krsort($ups);
     $message = "\nToday's Biggest Change on $exchangeId\n\n";
+    $message .= getStringSpace(0, "-")."\n";
     foreach(array_splice($ups,0,8) as ['symbol'=>$symbol, 'percentage'=>$percentage, 'last'=>$last]) {
         $percentage = number_format($percentage, 2);
         if($last < 0.01) {
@@ -73,6 +75,58 @@ function sortPsersentage(string $exchangeId, array $exchange) : string
     ksort($downs);
     $message .= getStringSpace(0, "-")."\n";
     foreach(array_splice($downs,0,2) as ['symbol'=>$symbol, 'percentage'=>$percentage, 'last'=>$last]) {
+        $percentage = number_format($percentage, 2);
+        if($last < 0.01) {
+            $last = number_format($last, 10);
+        }
+        [0=>$coinName, 1=>$baseCurrencyName] = explode('/',$symbol);
+        $message .= alignmentLeftRight("$coinName", "$last $baseCurrencyName", "$percentage%");
+    }
+    $message .= getStringSpace(0, "-")."\n";
+    $message .= date('Y-m-d H:i:s')." UTC\n\n";
+    echo $message;
+    return $message;
+}
+
+function spot(string $exchangeId, array $exchange) : string
+{
+    $usdtSymbols = [
+        'BTC/USDT',
+        'ETH/USDT',
+        'SHIB/USDT',
+        'BUSD/USDT',
+        'BNB/USDT',
+        'DOGE/USDT',
+        'XRP/USDT',
+        'AVAX/USDT',
+        'SOL/USDT',
+        'TRX/USDT',
+    ];
+    $krwSymbols = [
+        'BTC/KRW',
+        'ETH/KRW',
+        'LUNA/KRW',
+        'FIL/KRW',
+        'ADA/KRW',
+        'DOGE/KRW',
+        'XRP/KRW',
+        'AVAX/KRW',
+        'SOL/KRW',
+        'KLAY/KRW',
+    ];
+    $symbols = $usdtSymbols;
+    if(in_array($exchangeId, ['coinone'])) {
+        $symbols = $krwSymbols;
+    }
+    $spots = [];
+    foreach($exchange as $symbol => $data) {
+        if(in_array($symbol, $symbols)) {
+            $spots[$symbol] = $data;
+        }
+    }
+    $message = "\nSpot on $exchangeId\n\n";
+    $message .= getStringSpace(0, "-")."\n";
+    foreach(array_splice($spots,0,10) as ['symbol'=>$symbol, 'percentage'=>$percentage, 'last'=>$last]) {
         $percentage = number_format($percentage, 2);
         if($last < 0.01) {
             $last = number_format($last, 10);
