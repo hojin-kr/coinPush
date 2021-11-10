@@ -83,7 +83,7 @@ function tickValidator(array $exchange=[]) : array
 {
     $vaild = [];
     foreach($exchange as $symbol => $data) {
-        if(!isset($data['symbol']) || !isset($data['percentage']) || !isset($data['last'])) {
+        if(!isset($data['symbol']) || !isset($data['percentage']) || !isset($data['last']) || !isset($data['quoteVolume'])) {
             continue;
         }
         $vaild[$symbol] = $data;

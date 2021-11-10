@@ -10,7 +10,7 @@ date_default_timezone_set ('UTC');
 $IS_TEST = false;
 
 // 거래소별 파싱
-$exchanges = [new \ccxt\binance, new \ccxt\kucoin, new \ccxt\coinone];
+$exchanges = [new \ccxt\binance, new \ccxt\kucoin];
 $_exchanges = [];
 if(!$IS_TEST) {
     foreach($exchanges as $exchange) {
@@ -31,6 +31,7 @@ if(!empty($_exchanges)) {
         $mediaIds = [];
         $medias[] = exportImage(sortPsersentage($exchangeId, $_exchange), $exchangeId."_persentage");
         $medias[] = exportImage(spot($exchangeId, $_exchange), $exchangeId."_spot");
+        $medias[] = exportImage(spotVolume($exchangeId, $_exchange), $exchangeId."_spot_volume");
         /**
          * todo add some analysis images
          * $medias[] = someMethod();
@@ -45,7 +46,7 @@ if(!empty($_exchanges)) {
         // 트윗
         if(!$IS_TEST) {
             echo "[LOG] twurlUpdateStatus $exchangeId... \n";
-            $status = "Today on $exchangeId #coin #binance #kucoin #coinone #doge #btc";
+            $status = "Today on $exchangeId #coin #binance #kucoin #coinbase #doge #btc";
             twurlUpdateStatus($status, $mediaIds);
         }
         echo "[LOG] Today $exchangeId Done \n";
@@ -68,6 +69,8 @@ function sortPsersentage(string $exchangeId, array $exchange) : string
         $percentage = number_format($percentage, 2);
         if($last < 0.01) {
             $last = number_format($last, 10);
+        } else {
+            $last = number_format($last, 2);
         }
         [0=>$coinName, 1=>$baseCurrencyName] = explode('/',$symbol);
         $message .= alignmentLeftRight("$coinName", "$last $baseCurrencyName", "$percentage%");
@@ -91,40 +94,13 @@ function sortPsersentage(string $exchangeId, array $exchange) : string
 
 function spot(string $exchangeId, array $exchange) : string
 {
-    $usdtSymbols = [
-        'BTC/USDT',
-        'ETH/USDT',
-        'SHIB/USDT',
-        'BUSD/USDT',
-        'BNB/USDT',
-        'DOGE/USDT',
-        'XRP/USDT',
-        'AVAX/USDT',
-        'SOL/USDT',
-        'TRX/USDT',
-    ];
-    $krwSymbols = [
-        'BTC/KRW',
-        'ETH/KRW',
-        'LUNA/KRW',
-        'FIL/KRW',
-        'ADA/KRW',
-        'DOGE/KRW',
-        'XRP/KRW',
-        'AVAX/KRW',
-        'SOL/KRW',
-        'KLAY/KRW',
-    ];
-    $symbols = $usdtSymbols;
-    if(in_array($exchangeId, ['coinone'])) {
-        $symbols = $krwSymbols;
-    }
     $spots = [];
     foreach($exchange as $symbol => $data) {
-        if(in_array($symbol, $symbols)) {
+        if(explode('/',$symbol)[1] == 'USDT') {
             $spots[$symbol] = $data;
         }
     }
+    usort($spots, "sortVolume");
     $message = "\nPopular\n";
     $message .= alignmentLeftRight(" ","[$exchangeId]");
     $message .= getStringSpace(0, "-")."\n";
@@ -135,6 +111,49 @@ function spot(string $exchangeId, array $exchange) : string
         }
         [0=>$coinName, 1=>$baseCurrencyName] = explode('/',$symbol);
         $message .= alignmentLeftRight("$coinName", "$last $baseCurrencyName", "$percentage%");
+    }
+    $message .= getStringSpace(0, "-")."\n";
+    $message .= date('Y-m-d H:i:s')." UTC\n\n";
+    echo $message;
+    return $message;
+}
+
+function sortVolume($a, $b)
+{
+    if ($a['quoteVolume'] == $b['quoteVolume']) {
+        return 0;
+    }
+    return ($a['quoteVolume'] > $b['quoteVolume']) ? -1 : 1;
+}
+
+
+function spotVolume(string $exchangeId, array $exchange) : string
+{
+    $spots = [];
+    foreach($exchange as $symbol => $data) {
+        if(explode('/',$symbol)[1] == 'USDT') {
+            $spots[$symbol] = $data;
+        }
+    }
+    usort($spots, "sortVolume");
+    $spots = array_splice($spots,0,10);
+    $sumVolume = 0;
+    $cntVolume = 0;
+    foreach($spots as $data) {
+        $sumVolume += $data['quoteVolume'];
+        $cntVolume += 1;
+    }
+    $message = "\nVolume\n";
+    $message .= alignmentLeftRight(" ","[$exchangeId]");
+    $message .= getStringSpace(0, "-")."\n";
+    foreach($spots as ['symbol'=>$symbol, 'quoteVolume'=>$volume]) {
+        if(is_null($volume)) {
+            continue;
+        }
+        [0=>$coinName, 1=>$baseCurrencyName] = explode('/',$symbol);
+        $volumePercentage = number_format($volume/$sumVolume*100,2);
+        $volume = number_format($volume,2);
+        $message .= alignmentLeftRight("$coinName", "$volume $baseCurrencyName", "$volumePercentage%");
     }
     $message .= getStringSpace(0, "-")."\n";
     $message .= date('Y-m-d H:i:s')." UTC\n\n";
