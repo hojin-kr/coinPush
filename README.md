@@ -2,6 +2,7 @@
 코인 현황에 대해 주기적으로 체크해서 푸시 
 - 푸시 대상 : 트위터
 - 서버 : Github Action (Cron 스케쥴링)
+https://twitter.com/coinPushBot
 
 #### 참고 
 
@@ -16,6 +17,13 @@ cctx 라이브러리
 - 이미지로 제작 (Text to Image)
 - 트위터로 게시 (twurl)
 
-![image](https://user-images.githubusercontent.com/22079767/140601971-487b38ee-e933-4017-b0e4-cde0b1c59b72.png)
+#### 분석
+- 최고 변동률
+- 가장 큰 볼륨
+- 볼륨 점유율
 
-![image](https://user-images.githubusercontent.com/22079767/140601951-3f1825ca-38ae-4169-ac62-0a0c408b01c7.png)
+#### 결과
+https://twitter.com/coinPushBot   
+https://github.com/hojin-kr/coinPush/tree/main/temp   
+
+![image](https://user-images.githubusercontent.com/22079767/141801430-0fa9c13e-3a6c-4cad-b56d-64ef7bf402bd.png)
