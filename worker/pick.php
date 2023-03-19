@@ -35,14 +35,9 @@ foreach($exchanges as $exchange) {
     $file = exportImage($message, $exchange->id);
     echo "[LOG] exportImage $file ... \n";
     // 이미지 업로드
-    $media = twurlUploadMedia($file);
-    echo "[LOG] twurlUploadMedia $media->media_id ... \n";
-    $mediaIds[] = $media->media_id;
+    lineNotify("Pick $exchange->id", $file);
 }
-// 트윗
 $status = "Pick ".date('Y-M-D H:i:M');
-twurlUpdateStatus($status, $mediaIds);
-echo "[LOG] twurlUpdateStatus $status ... \n";
 echo "[LOG] Pick Done \n";
 
 ?>

@@ -83,7 +83,6 @@ function sortPsersentage(string $exchangeId, array $exchange) : string
     $message .= getStringSpace(0, "-")."\n";
     $message .= date('Y-m-d H:i:s')." UTC\n\n";
     echo $message;
-    lineNotify($message);
     return $message;
 }
 
@@ -110,7 +109,6 @@ function spot(string $exchangeId, array $exchange) : string
     $message .= getStringSpace(0, "-")."\n";
     $message .= date('Y-m-d H:i:s')." UTC\n\n";
     echo $message;
-    lineNotify($message);
     return $message;
 }
 
@@ -154,7 +152,6 @@ function spotVolume(string $exchangeId, array $exchange) : string
     $message .= getStringSpace(0, "-")."\n";
     $message .= date('Y-m-d H:i:s')." UTC\n\n";
     echo $message;
-    lineNotify($message);
     return $message;
 }
 ?>
