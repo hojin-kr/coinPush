@@ -39,15 +39,9 @@ if(!empty($_exchanges)) {
         if(!empty($medias) && !$IS_TEST) {
             foreach($medias as $media) {
                 // 이미지 업로드
-                echo "[LOG] twurlUploadMedia  ... \n";
-                $mediaIds[] = twurlUploadMedia($media)->media_id;
+                echo "[LOG]Sending LineNotify \n";
+                lineNotify("Today $exchangeId", $media);
             }
-        }
-        // 트윗
-        if(!$IS_TEST) {
-            echo "[LOG] twurlUpdateStatus $exchangeId... \n";
-            $status = "Today on $exchangeId #coin #binance #kucoin #analysis #doge #btc";
-            twurlUpdateStatus($status, $mediaIds);
         }
         echo "[LOG] Today $exchangeId Done \n";
         sleep(5);
@@ -89,6 +83,7 @@ function sortPsersentage(string $exchangeId, array $exchange) : string
     $message .= getStringSpace(0, "-")."\n";
     $message .= date('Y-m-d H:i:s')." UTC\n\n";
     echo $message;
+    lineNotify($message);
     return $message;
 }
 
@@ -115,6 +110,7 @@ function spot(string $exchangeId, array $exchange) : string
     $message .= getStringSpace(0, "-")."\n";
     $message .= date('Y-m-d H:i:s')." UTC\n\n";
     echo $message;
+    lineNotify($message);
     return $message;
 }
 
@@ -158,6 +154,7 @@ function spotVolume(string $exchangeId, array $exchange) : string
     $message .= getStringSpace(0, "-")."\n";
     $message .= date('Y-m-d H:i:s')." UTC\n\n";
     echo $message;
+    lineNotify($message);
     return $message;
 }
 ?>
