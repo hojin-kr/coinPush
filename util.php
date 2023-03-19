@@ -20,7 +20,7 @@ function twurlUploadMedia($file) {
 function lineNotify($message, $file=null) {
     $lineToken = getenv("LINETOKEN");
     if (is_null($file)) {
-        echo shell_exec("curl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' -F https://notify-api.line.me/api/notify 2>&1");
+        echo shell_exec("curl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' https://notify-api.line.me/api/notify 2>&1");
     } else {
         echo shell_exec("curl -X POST -H 'Authorization: Bearer $lineToken' -F 'message=$message' -F 'imageFile=@$file' https://notify-api.line.me/api/notify 2>&1");
     }
