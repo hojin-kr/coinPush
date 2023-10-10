@@ -14,6 +14,7 @@ jobs:
       TW_API_KEY_SECRET: ${{ secrets.TW_API_KEY_SECRET }}
       TW_API_TOKEN: ${{ secrets.TW_API_TOKEN }}
       TW_API_TOKEN_SECRET: ${{ secrets.TW_API_TOKEN_SECRET }}
+      SLACK_WEBHOOK_URL : ${{ secrets.SLACK_WEBHOOK_URL }}
 
     runs-on: ubuntu-latest
 
