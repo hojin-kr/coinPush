@@ -40,14 +40,16 @@ if(!empty($_exchanges)) {
             foreach($medias as $media) {
                 // 이미지 업로드
                 echo "[LOG] twurlUploadMedia  ... \n";
-                $mediaIds[] = twurlUploadMedia($media)->media_id;
+                // x remove
+                // $mediaIds[] = twurlUploadMedia($media)->media_id;
             }
         }
         // 트윗
         if(!$IS_TEST) {
             echo "[LOG] twurlUpdateStatus $exchangeId... \n";
             $status = "Today on $exchangeId #coin #binance #kucoin #analysis #doge #btc";
-            twurlUpdateStatus($status, $mediaIds);
+            // x remove
+            // twurlUpdateStatus($status, $mediaIds);
         }
         echo "[LOG] Today $exchangeId Done \n";
         sleep(5);
