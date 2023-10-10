@@ -35,13 +35,16 @@ foreach($exchanges as $exchange) {
     $file = exportImage($message, $exchange->id);
     echo "[LOG] exportImage $file ... \n";
     // 이미지 업로드
-    $media = twurlUploadMedia($file);
+    // x remove
+    // $media = twurlUploadMedia($file);
     echo "[LOG] twurlUploadMedia $media->media_id ... \n";
-    $mediaIds[] = $media->media_id;
+    // x remove
+    // $mediaIds[] = $media->media_id;
 }
 // 트윗
 $status = "Pick ".date('Y-M-D H:i:M');
-twurlUpdateStatus($status, $mediaIds);
+// x remove
+// twurlUpdateStatus($status, $mediaIds);
 echo "[LOG] twurlUpdateStatus $status ... \n";
 echo "[LOG] Pick Done \n";
 
