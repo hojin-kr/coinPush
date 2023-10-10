@@ -29,9 +29,19 @@ if(!empty($_exchanges)) {
         $_exchange = tickValidator($_exchange);
         $medias = [];
         $mediaIds = [];
-        $medias[] = exportImage(sortPsersentage($exchangeId, $_exchange), $exchangeId."_persentage");
-        $medias[] = exportImage(spot($exchangeId, $_exchange), $exchangeId."_spot");
-        $medias[] = exportImage(spotVolume($exchangeId, $_exchange), $exchangeId."_spot_volume");
+
+
+        $sortPersentage = sortPsersentage($exchangeId, $_exchange);
+        $spot = spot($exchangeId, $_exchange);
+        $spotVolume = spotVolume($exchangeId, $_exchange);
+        // send to slack
+        sendToSlack($sortPersentage);
+        sendToSlack($spot);
+        sendToSlack($spotVolume);
+        // crate image
+        $medias[] = exportImage($sortPersentage, $exchangeId."_persentage");
+        $medias[] = exportImage($spot, $exchangeId."_spot");
+        $medias[] = exportImage($spotVolume, $exchangeId."_spot_volume");
         /**
          * todo add some analysis images
          * $medias[] = someMethod();

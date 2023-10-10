@@ -1,5 +1,11 @@
 <?php
 
+function sendToSlack($message) {
+    $webhookURL = getenv("SLACK_WEBHOOK_URL");
+    $result = shell_exec('curl -X POST --data-urlencode "payload={\"channel\": \"#coin\", \"username\": \"webhookbot\", \"text\": \"'.$message.'\", \"icon_emoji\": \":ghost:\"}" '.$webhookURL.' 2>&1');
+    return $result;
+}
+
 function twurlUpdateStatus(string $message, array $mediaIds) {
     $TW_API_KEY = getenv("TW_API_KEY");
     $TW_API_KEY_SECRET = getenv("TW_API_KEY_SECRET");
